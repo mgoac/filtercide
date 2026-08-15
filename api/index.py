@@ -41,10 +41,10 @@ def download_video():
 
     ydl_opts = {
         'quiet': True,
-        'format': 'best[ext=mp4]',
+        'format': 'bestvideo+bestaudio/best',
         'cookiefile': cookie_path,
-        'no_cookies': True,      # Prevents yt-dlp from saving updated cookies
-        'nooverwrites': True,    # Extra safety: don't overwrite files
+        'no_cookies': True,
+        'nooverwrites': True,
     }
 
     try:
