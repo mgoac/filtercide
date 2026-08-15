@@ -3,13 +3,16 @@ import yt_dlp
 import io
 import requests
 import os
-
-COOKIE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'cookies.txt')
-
-root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+import shutil
+import time
 
 app = Flask(__name__)
 
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Paths to your cookie file
+src_cookie_path = os.path.join(root_dir, 'cookies.txt')
+tmp_cookie_path = '/tmp/cookies.txt'
 
 @app.route('/')
 def index():
@@ -19,31 +22,52 @@ def index():
 def downloader():
     return send_from_directory(root_dir, 'downloader.html')
 
-#e
 @app.route('/api/download', methods=['GET'])
 def download_video():
     url = request.args.get('url')
     if not url:
         return {"error": "Missing url parameter"}, 400
 
+    # Copy cookie file to writable /tmp directory
+    try:
+        # Use a unique filename to avoid race conditions
+        unique_cookie_path = f'/tmp/cookies_{int(time.time())}.txt'
+        shutil.copy2(src_cookie_path, unique_cookie_path)
+        cookie_path = unique_cookie_path
+    except Exception as e:
+        print(f"Could not copy cookies: {e}")
+        # Fallback: try the original path if copying fails
+        cookie_path = src_cookie_path
+
     ydl_opts = {
         'quiet': True,
         'format': 'best[ext=mp4]',
-        'cookiefile': COOKIE_PATH  # <-- ADD THIS LINE
+        'cookiefile': cookie_path,
+        'no_cookies': True,      # Prevents yt-dlp from saving updated cookies
+        'nooverwrites': True,    # Extra safety: don't overwrite files
     }
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
-        video_url = info['url']
-        title = info.get('title', 'video')
 
-    response = requests.get(video_url, stream=True)
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            video_url = info['url']
+            title = info.get('title', 'video')
 
-    return send_file(
-        io.BytesIO(response.content),
-        as_attachment=True,
-        download_name=f"{title}.mp4",
-        mimetype='video/mp4'
-    )
+        response = requests.get(video_url, stream=True)
+
+        return send_file(
+            io.BytesIO(response.content),
+            as_attachment=True,
+            download_name=f"{title}.mp4",
+            mimetype='video/mp4'
+        )
+    finally:
+        # Clean up the temporary cookie file
+        if cookie_path != src_cookie_path:
+            try:
+                os.remove(cookie_path)
+            except:
+                pass
 
 # Vercel needs this
 app = app
