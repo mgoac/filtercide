@@ -3,7 +3,8 @@ import yt_dlp
 import io
 import requests
 import os
-import os
+
+COOKIE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'cookies.txt')
 
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -28,7 +29,7 @@ def download_video():
     ydl_opts = {
         'quiet': True,
         'format': 'best[ext=mp4]',
-        'cookiefile': 'cookies.txt'  # <-- ADD THIS LINE
+        'cookiefile': COOKIE_PATH  # <-- ADD THIS LINE
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
