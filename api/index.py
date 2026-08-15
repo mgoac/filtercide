@@ -2,17 +2,18 @@ from flask import Flask, request, send_file, send_from_directory
 import yt_dlp
 import io
 import requests
+import os
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(root_dir, 'index.html')
 
 @app.route('/downloader')
 def downloader():
-    return send_from_directory('.', 'downloader.html')
+    return send_from_directory(root_dir, 'downloader.html')
 
 @app.route('/api/download', methods=['GET'])
 def download_video():
