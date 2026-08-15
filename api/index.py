@@ -25,25 +25,23 @@ def download_video():
     if not url:
         return {"error": "Missing url parameter"}, 400
 
-    ydl_opts = {'quiet': True, 'format': 'best[ext=mp4]'}
+    ydl_opts = {
+        'quiet': True,
+        'format': 'best[ext=mp4]',
+        'cookiefile': 'cookies.txt'  # <-- ADD THIS LINE
+    }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         video_url = info['url']
         title = info.get('title', 'video')
 
-    # Stream directly to the user without storing in memory
     response = requests.get(video_url, stream=True)
 
-    def generate():
-        for chunk in response.iter_content(chunk_size=8192):
-            yield chunk
-
-    return app.response_class(
-        generate(),
-        headers={
-            'Content-Disposition': f'attachment; filename="{title}.mp4"',
-            'Content-Type': 'video/mp4'
-        }
+    return send_file(
+        io.BytesIO(response.content),
+        as_attachment=True,
+        download_name=f"{title}.mp4",
+        mimetype='video/mp4'
     )
 
 # Vercel needs this
