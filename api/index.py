@@ -3,6 +3,9 @@ import yt_dlp
 import io
 import requests
 import os
+import os
+
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 app = Flask(__name__)
 
