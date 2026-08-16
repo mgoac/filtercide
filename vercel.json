@@ -40,6 +40,10 @@
     {
       "source": "/go/:path*",
       "destination": "https://:path*"
+    },
+    {
+      "source": "/www.youtubeunblocked.live/servers",
+      "destination": "https://www.youtubeunblocked.live/servers"
     }
   ]
 }
