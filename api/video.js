@@ -1,4 +1,5 @@
-const ytdl = require('ytdl-core');
+const axios = require('axios');
+const cheerio = require('cheerio');
 
 module.exports = async (req, res) => {
   // Enable CORS
@@ -21,27 +22,50 @@ module.exports = async (req, res) => {
   const cookieString = cookies.map(c => `${c.name}=${c.value}`).join('; ');
 
   try {
-    // Get video info with cookies and timeout
-    const info = await Promise.race([
-      ytdl.getInfo(videoUrl, {
-        requestOptions: {
-          headers: {
-            Cookie: cookieString
-          }
-        }
-      }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 15000))
-    ]);
+    // Fetch the YouTube page
+    const response = await axios.get(videoUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Cookie': cookieString
+      },
+      timeout: 15000
+    });
 
-    // Get the highest quality video + audio format
-    const format = ytdl.chooseFormat(info.formats, { quality: 'highest' });
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    // Extract video title
+    const title = $('meta[name="title"]').attr('content') || $('h1.ytd-video-primary-info-renderer').text().trim() || 'Video';
+
+    // Extract thumbnail
+    const thumbnail = $('meta[property="og:image"]').attr('content') || '';
+
+    // Extract video URL from player response
+    const playerResponseMatch = html.match(/ytInitialPlayerResponse\s*=\s*({.*?});/);
+    if (!playerResponseMatch) {
+      throw new Error('Could not find player response in page');
+    }
+
+    const playerResponse = JSON.parse(playerResponseMatch[1]);
+    const formats = playerResponse?.streamingData?.formats || [];
+    const adaptiveFormats = playerResponse?.streamingData?.adaptiveFormats || [];
+    const allFormats = [...formats, ...adaptiveFormats];
+
+    // Find the best video+audio format
+    const bestFormat = allFormats
+      .filter(f => f.mimeType && f.mimeType.includes('mp4'))
+      .sort((a, b) => (b.bitrate || 0) - (a.bitrate || 0))[0];
+
+    if (!bestFormat || !bestFormat.url) {
+      throw new Error('No video URL found');
+    }
 
     // Return the video URL as JSON
     res.status(200).json({
       success: true,
-      videoUrl: format.url,
-      title: info.videoDetails.title,
-      thumbnail: info.videoDetails.thumbnails[0].url
+      videoUrl: bestFormat.url,
+      title: title,
+      thumbnail: thumbnail
     });
   } catch (error) {
     console.error('Error:', error.message);
