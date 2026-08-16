@@ -39,35 +39,16 @@
   "rewrites": [
     {
       "source": "/youtube",
-      "destination": "https://www.youtube.com/"
+      "destination": "https://www.youtubeunblocked.live/"
     },
     {
-      "source": "/youtube/:path*",
-      "destination": "https://www.youtube.com/:path*"
+      "source": "/servers",
+      "destination": "https://youtubeunblocked.live/:path*"
     },
+
     {
-      "source": "/results",
-      "destination": "https://www.youtube.com/results"
-    },
-    {
-      "source": "/results/:path*",
-      "destination": "https://www.youtube.com/results/:path*"
-    },
-    {
-      "source": "/shorts",
-      "destination": "https://www.youtube.com/shorts"
-    },
-    {
-      "source": "/shorts/:path*",
-      "destination": "https://www.youtube.com/shorts/:path*"
-    },
-    {
-      "source": "/watch",
-      "destination": "https://www.youtube.com/watch"
-    },
-    {
-      "source": "/watch/:path*",
-      "destination": "https://www.youtube.com/:path*"
+      "source": "/go/:path*",
+      "destination": "https://:path*"
     }
   ]
 }
