@@ -22,6 +22,10 @@
   ],
   "rewrites": [
     {
+      "source": "/youtube",
+      "destination": "https://www.youtube.com/"
+    },
+    {
       "source": "/youtube/:path*",
       "destination": "https://www.youtube.com/:path*"
     }
