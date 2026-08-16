@@ -6,11 +6,11 @@
       "use": "@vercel/static"
     },
     {
-      "src": "css/*",
+      "src": "css/**",
       "use": "@vercel/static"
     },
     {
-      "src": "js/*",
+      "src": "js/**",
       "use": "@vercel/static"
     }
   ],
@@ -36,6 +36,14 @@
     {
       "source": "/youtube/:path*",
       "destination": "https://www.youtube.com/:path*"
+    },
+    {
+      "source": "/results",
+      "destination": "https://www.youtube.com/results"
+    },
+    {
+      "source": "/results/:path*",
+      "destination": "https://www.youtube.com/results/:path*"
     }
   ]
 }
