@@ -26,7 +26,12 @@
     {
       "src": "/js/(.*)",
       "dest": "/js/$1"
+    },
+    {
+      "src": "/api/video",
+      "dest": "/api/video.js"
     }
+
   ],
   "rewrites": [
     {
