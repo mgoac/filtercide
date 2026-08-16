@@ -6,12 +6,8 @@
       "use": "@vercel/static"
     },
     {
-      "src": "css/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "js/**",
-      "use": "@vercel/static"
+      "src": "api/video.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -20,18 +16,17 @@
       "dest": "/index.html"
     },
     {
+      "src": "/api/video",
+      "dest": "/api/video.js"
+    },
+    {
       "src": "/css/(.*)",
       "dest": "/css/$1"
     },
     {
       "src": "/js/(.*)",
       "dest": "/js/$1"
-    },
-    {
-      "src": "/api/video",
-      "dest": "/api/video.js"
     }
-
   ],
   "rewrites": [
     {
@@ -51,8 +46,8 @@
       "destination": "https://www.youtube.com/results/:path*"
     },
     {
-      "source":"/shorts",
-      "destination":"https://www.youtube.com/shorts"
+      "source": "/shorts",
+      "destination": "https://www.youtube.com/shorts"
     },
     {
       "source": "/shorts/:path*",
@@ -64,8 +59,7 @@
     },
     {
       "source": "/watch/:path*",
-      "destination": "https://www.youtube.com/:path"
+      "destination": "https://www.youtube.com/:path*"
     }
-
   ]
 }
