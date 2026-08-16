@@ -1,7 +1,0 @@
-{
-  "name": "filtercide",
-  "version": "1.0.0",
-  "dependencies": {
-    "@kaviaann/scrape": "^1.0.3"
-  }
-}
