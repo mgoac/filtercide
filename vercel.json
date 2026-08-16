@@ -1,27 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/video.js",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "css/**",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "js/**",
-      "use": "@vercel/static"
-    }
-  ],
   "routes": [
     {
-      "src": "/api/video",
-      "dest": "/api/video.js"
+      "src": "/",
+      "dest": "/index.html"
     },
     {
       "src": "/css/(.*)",
@@ -30,10 +12,6 @@
     {
       "src": "/js/(.*)",
       "dest": "/js/$1"
-    },
-    {
-      "src": "/",
-      "dest": "/index.html"
     }
   ],
   "rewrites": [
@@ -43,9 +21,8 @@
     },
     {
       "source": "/servers",
-      "destination": "https://youtubeunblocked.live/:path*"
+      "destination": "https://youtubeunblocked.live/servers"
     },
-
     {
       "source": "/go/:path*",
       "destination": "https://:path*"
