@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/css/games.css">
+        <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet">
+        
+    </head>
+
+    <body>
+        <h1 class="games-title">Games</h1>
+        <input type="text" id="searchbar"/>
+        <div class="game-container" id="game-container">
+            <!-- Games will be dynamically inserted here -->
+        </div>
+
+        <canvas id="c"></canvas>
+        <script src="/js/bg.js"></script>
+        <script>
+            // Fetch names.txt and generate game cards
+            fetch('/names.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const names = data.split('\n').filter(name => name.trim() !== '');
+                    const container = document.getElementById('game-container');
+
+                    names.forEach(name => {
+                        const gameDiv = document.createElement('div');
+                        gameDiv.className = 'game';
+
+                        gameDiv.innerHTML = `
+                            <div class="game-image">
+                                <a href="games/cl${name}.html">
+                                    <img src="game.png">
+                                </a>
+                            </div>
+                            <div class="game-title">
+                                ${name}
+                            </div>
+                        `;
+
+                        container.appendChild(gameDiv);
+                    });
+                })
+                .catch(error => console.error('Error loading names.txt:', error));
+        </script>
+
+        <script>
+            const searchbar = document.getElementById('searchbar');
+
+            searchbar.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                const games = document.querySelectorAll('.game');
+
+                games.forEach(game => {
+                    const title = game.querySelector('.game-title').textContent.toLowerCase();
+                    if (title.includes(query)) {
+                        game.style.display = 'block';  // Show matching games
+                    } else {
+                        game.style.display = 'none';   // Hide non-matching games
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
