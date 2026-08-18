@@ -449,7 +449,6 @@ codworldatwar
 coffeemaker
 coldfront
 coldpines
-Colorboxmustard
 colorburst3d
 colormatch
 colorwatersort3d
@@ -2036,7 +2035,6 @@ quake64
 QuantumClicker
 quickieworld
 qwop
-rabbithole106
 racemaster3d
 racingarena
 radicalred
@@ -2784,8 +2782,6 @@ umjammerlammy
 umstickmangameidkiforgor
 uncannycatgolf
 underneath
-undertale-gameboy
-undertale-gameboy(1)
 undertalelb
 undertaler
 undertaleyellow

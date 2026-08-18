@@ -103,13 +103,75 @@ html, body {
     margin: 0 auto;         /* Center the container */
     padding: 0 20px;        /* Padding on both sides */
     gap: 20px;
+    transition: 0.3s ease;
 }
+
+
+
+@keyframes gameGlitch {
+    0% {
+        transform: translate(0);
+        opacity: 1;
+    }
+
+    10% {
+        transform: translate(-2px, 0);
+        opacity: 0.75;
+    }
+
+    15% {
+        transform: translate(2px, 0);
+        opacity: 0.35;
+    }
+
+    20% {
+        transform: translate(-1px, 0);
+        opacity: 0.85;
+    }
+
+    25% {
+        transform: translate(0);
+        opacity: 1;
+    }
+
+    55% {
+        transform: translate(0);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translate(3px, 0);
+        opacity: 0.45;
+    }
+
+    65% {
+        transform: translate(-2px, 0);
+        opacity: 0.7;
+    }
+
+    70% {
+        transform: translate(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(0);
+        opacity: 1;
+    }
+}
+
+
 
 .game {
     z-index: 1;
     background: #222;
     border-radius: 10px;
     overflow: hidden;
+    transition: 0.3s ease;
+}
+
+.game:hover {
+    animation: gameGlitch 0.5s steps(1) 1;
 }
 
 .game-image {
