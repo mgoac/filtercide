@@ -6,6 +6,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "games.html",
+      "use": "@vercel/static"
+    },
+    {
       "src": "css/**",
       "use": "@vercel/static"
     },
@@ -26,6 +30,10 @@
     {
       "src": "/js/(.*)",
       "dest": "/js/$1"
+    },
+    {
+      "src": "/games",
+      "dest": "/games.html"
     }
   ],
   
